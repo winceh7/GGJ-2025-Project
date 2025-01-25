@@ -24,7 +24,7 @@ public class UnderwaterMovement : MonoBehaviour
     {
         float horizontalFlip = 0;
         float rotation = 0;
-        if (Math.Abs(x) < Math.Abs(y)-0.5)
+        if (Math.Abs(x) < Math.Abs(y)-0.05)
         { 
             rotation = y < 0 ? -90 : 90;
         }

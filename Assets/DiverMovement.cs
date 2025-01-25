@@ -41,6 +41,16 @@ public class UnderwaterMovement : MonoBehaviour
         animator.SetFloat("yInput", y);
     }
 
+    public void UpdateLampPose(float x, float y, float theta)
+    {
+        GameObject lamp = GameObject.FindGameObjectWithTag("DiverLamp");
+        float offset = 3f;
+        float xOffset = (float)Math.Cos(theta * Mathf.Deg2Rad);
+        float yOffset = (float)Math.Sin(theta * Mathf.Deg2Rad);
+        lamp.transform.position = new Vector3(x + xOffset, y + yOffset);
+        lamp.transform.rotation = Quaternion.Euler(0, 0, theta);
+    }
+
     void Update()
     {
         // Get input for movement
@@ -57,8 +67,18 @@ public class UnderwaterMovement : MonoBehaviour
         controller.Move(move * speed * Time.deltaTime);
 
         float movementSpeed = controller.velocity.magnitude;
+        Vector3 PlayerPOS = GameObject.FindGameObjectWithTag("Player").transform.position;
+
 
         SetSpeedAndDirection(prevXNonZero ,controller.velocity.x, controller.velocity.y, movementSpeed);
+        
+        float direction = (float)Math.Atan(controller.velocity.y / controller.velocity.x) * 180.0f / (float)Math.PI;
+        direction = controller.velocity.x < 0 ? direction - 180 : direction;
+
+        if (movementSpeed != 0)
+        {
+            UpdateLampPose(PlayerPOS.x, PlayerPOS.y, direction);
+        }
         prevXNonZero = moveX != 0? moveX : prevXNonZero;
     }
 }

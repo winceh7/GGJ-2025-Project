@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - DiverLamp
+  - DyingIndicator
+  - PlayerHitbox
   layers:
   - Default
   - TransparentFX
@@ -56,4 +58,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3751335885
+    locked: 0
+  - name: DyingOverlay
+    uniqueID: 2442875123
     locked: 0

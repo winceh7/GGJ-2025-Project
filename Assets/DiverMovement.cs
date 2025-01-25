@@ -44,7 +44,6 @@ public class UnderwaterMovement : MonoBehaviour
     public void UpdateLampPose(float x, float y, float theta)
     {
         GameObject lamp = GameObject.FindGameObjectWithTag("DiverLamp");
-        float offset = 3f;
         float xOffset = (float)Math.Cos(theta * Mathf.Deg2Rad);
         float yOffset = (float)Math.Sin(theta * Mathf.Deg2Rad);
         lamp.transform.position = new Vector3(x + xOffset, y + yOffset);
@@ -53,32 +52,38 @@ public class UnderwaterMovement : MonoBehaviour
 
     void Update()
     {
-        // Get input for movement
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
-        // Create a movement vector
-        Vector3 move = new Vector3(moveX, moveY, 0);
+        bool dead = GameObject.FindWithTag("PlayerHitbox").GetComponent<OxygenManagement>().dead;
 
-        if (move.magnitude > 1)
+        if (!dead)
         {
-            move.Normalize();
+            // Get input for movement
+            float moveX = Input.GetAxis("Horizontal");
+            float moveY = Input.GetAxis("Vertical");
+            // Create a movement vector
+            Vector3 move = new Vector3(moveX, moveY, 0);
+
+            if (move.magnitude > 1)
+            {
+                move.Normalize();
+            }
+
+            controller.Move(move * speed * Time.deltaTime);
+            float movementSpeed = controller.velocity.magnitude;
+            Vector3 PlayerPOS = GameObject.FindGameObjectWithTag("Player").transform.position;
+            SetSpeedAndDirection(prevXNonZero, controller.velocity.x, controller.velocity.y, movementSpeed);
+            float direction = (float)Math.Atan(controller.velocity.y / controller.velocity.x) * 180.0f / (float)Math.PI;
+            direction = controller.velocity.x < 0 ? direction - 180 : direction;
+
+            if (movementSpeed != 0)
+            {
+                UpdateLampPose(PlayerPOS.x, PlayerPOS.y, direction);
+            }
+            prevXNonZero = moveX != 0? moveX : prevXNonZero;
+        }
+        else
+        {
+            SetSpeedAndDirection(prevXNonZero, 0, 0, 0);
         }
 
-        controller.Move(move * speed * Time.deltaTime);
-
-        float movementSpeed = controller.velocity.magnitude;
-        Vector3 PlayerPOS = GameObject.FindGameObjectWithTag("Player").transform.position;
-
-
-        SetSpeedAndDirection(prevXNonZero ,controller.velocity.x, controller.velocity.y, movementSpeed);
-        
-        float direction = (float)Math.Atan(controller.velocity.y / controller.velocity.x) * 180.0f / (float)Math.PI;
-        direction = controller.velocity.x < 0 ? direction - 180 : direction;
-
-        if (movementSpeed != 0)
-        {
-            UpdateLampPose(PlayerPOS.x, PlayerPOS.y, direction);
-        }
-        prevXNonZero = moveX != 0? moveX : prevXNonZero;
     }
 }

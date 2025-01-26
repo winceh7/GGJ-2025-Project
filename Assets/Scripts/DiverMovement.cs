@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnderwaterMovement : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class UnderwaterMovement : MonoBehaviour
     private float animationSpeedFactor = 0.3f;
 
     private float prevXNonZero = 0;
+    private float deathTime = 0;
 
     void Start()
     {
@@ -93,9 +95,18 @@ public class UnderwaterMovement : MonoBehaviour
         }
         else
         {
+            if (deathTime == 0)
+            {
+                deathTime = Time.time;
+            }
+            else if (deathTime + 8 <= Time.time)
+            {
+                GameObject.FindGameObjectWithTag("SceneManager").GetComponent<GameManager>().LoadScene(SceneManager.GetActiveScene().name);
+            }
             // Stop all movement if the player is dead
             rb2d.velocity = Vector2.zero;
             SetSpeedAndDirection(prevXNonZero, 0, 0, 0);
+
         }
     }
 }

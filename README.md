@@ -51,4 +51,4 @@ To open and run this project, you will need:
 - [Cave Tileset](https://silvdragoon-d.itch.io/cave-tileset) - Silvdragoon_D
 
 ## Support
-If you have any issues running the project, feel free to contact [Juan Pablo Suárez](j.pablo.suar@gmail.com), [Abraham De Alba](abradeal@gmail.com).
+If you have any issues running the project, feel free to contact [Juan Pablo Suárez](mailto:j.pablo.suar@gmail.com?subject=Deep%20Breath%20Game), [Abraham De Alba](mailto:abradeal@gmail.com?subject=Deep%20Breath%20Game).

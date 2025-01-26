@@ -22,6 +22,10 @@ TagManager:
   - SmallGreen
   - PlaceText
   - ProgressText
+  - PickUpOrb
+  - DoorSound
+  - BookLog
+  - SceneManager
   layers:
   - Default
   - TransparentFX

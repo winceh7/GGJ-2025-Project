@@ -33,7 +33,10 @@ public class PickUpOrbs : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("PlaceText").GetComponent<TextMeshProUGUI>().enabled = true;
             pedestalClose = other;
-
+        }
+        if (other.tag == "Pedestals" && other.GetComponentInParent<PedestalVariables>().holding && pickedOrb == "")
+        {
+            pedestalClose = other;
         }
     }
 
@@ -80,9 +83,9 @@ public class PickUpOrbs : MonoBehaviour
         {
             if (pedestalClose is not null && pedestalClose.GetComponentInParent<PedestalVariables>().holding && pickedOrb == "")
             {
-                Debug.Log(pedestalClose.GetComponentInParent<PedestalVariables>().holding);
                 pedestalClose.GetComponentInParent<PedestalVariables>().holding = false;
             }
+            GameObject.FindGameObjectWithTag("PickUpOrb").GetComponent<AudioSource>().Play();
             GameObject small = GameObject.FindGameObjectWithTag("Small" + char.ToUpper(pickableOrb[0]) + pickableOrb.Substring(1));
             GameObject orbToPick = FindOrbByName("Big_" + pickableOrb);
             orbToPick.transform.position = new Vector3(1000,1000,0);
@@ -92,6 +95,7 @@ public class PickUpOrbs : MonoBehaviour
             pickedOrb = pickableOrb;
         }else if (pickUpPressed && pedestalClose is not null && !pedestalClose.GetComponentInParent<PedestalVariables>().holding && pickedOrb != "")
         {
+            GameObject.FindGameObjectWithTag("PickUpOrb").GetComponent<AudioSource>().Play();
             pedestalClose.GetComponentInParent<PedestalVariables>().holding = true;
             GameObject.FindGameObjectWithTag("PlaceText").GetComponent<TextMeshProUGUI>().enabled = false;
             StopHolding(pedestalClose);

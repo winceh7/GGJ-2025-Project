@@ -3,7 +3,29 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - DiverLamp
+  - DyingIndicator
+  - PlayerHitbox
+  - EnterBubble
+  - ExitBubble
+  - BreathingSounds
+  - Drowning
+  - DeathSound
+  - Pedestals
+  - PickUpText
+  - Bubble
+  - Orb
+  - SmallBlue
+  - SmallRed
+  - SmallPurple
+  - SmallGreen
+  - PlaceText
+  - ProgressText
+  - PickUpOrb
+  - DoorSound
+  - BookLog
+  - SceneManager
   layers:
   - Default
   - TransparentFX
@@ -55,4 +77,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3751335885
+    locked: 0
+  - name: DyingOverlay
+    uniqueID: 2442875123
     locked: 0

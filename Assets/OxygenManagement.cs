@@ -12,18 +12,32 @@ public class OxygenManagement : MonoBehaviour
     private bool breathing = false;
     public float remainingOxygen;
     public float initialOverlayFactor;
-    private (float, float) minRedOverlaySize;
-    private (float, float) maxRedOverlaySize;
-    public bool dead;
+    public bool prevDead, dead;
     private GameObject overlay;
+    private bool exhale, drowning;
     private void OnTriggerEnter2D(Collider2D other)
     {
-        breathing = true;
+        if (other.tag == "Bubble")
+        {
+            breathing = true;
+            AudioSource enterSound = GameObject.FindGameObjectWithTag("EnterBubble").GetComponent<AudioSource>();
+            AudioSource exitSound = GameObject.FindGameObjectWithTag("ExitBubble").GetComponent<AudioSource>();
+            exitSound.Stop();
+            enterSound.Play();
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        breathing = false;
+        if (other.tag == "Bubble")
+        {
+            breathing = false;
+            AudioSource enterSound = GameObject.FindGameObjectWithTag("EnterBubble").GetComponent<AudioSource>();
+            AudioSource exitSound = GameObject.FindGameObjectWithTag("ExitBubble").GetComponent<AudioSource>();
+            enterSound.Stop();
+            exitSound.Play();
+        }
     }
 
     private void Start()
@@ -33,18 +47,43 @@ public class OxygenManagement : MonoBehaviour
         Drowning();
     }
 
+    private void Exhale()
+    {
+        exhale = true;
+        GameObject[] exhaleSounds = GameObject.FindGameObjectsWithTag("BreathingSounds");
+        int randomNumber = UnityEngine.Random.Range(0, exhaleSounds.Length);
+        exhaleSounds[randomNumber].GetComponent<AudioSource>().Play();
+    }
+
     private void Update()
     {
         if (breathing)
         {
             remainingOxygen = Math.Min(remainingOxygen + Time.deltaTime * recoveryFactor, maxOxygenCount);
-        }else
+            exhale = !(remainingOxygen == maxOxygenCount);
+        }
+        else
         {
             remainingOxygen = Math.Max(remainingOxygen - Time.deltaTime, 0);
         }
+        prevDead = dead;
         dead = remainingOxygen <= 0;
         Drowning();
         UpdateDeathStatus();
+
+        if (remainingOxygen < maxOxygenCount / 2 && !exhale)
+        {
+            Exhale();
+        }
+        if (remainingOxygen < 15 && !drowning)
+        {
+            drowning = true;
+            GameObject.FindGameObjectWithTag("Drowning").GetComponent<AudioSource>().Play();
+        }else if(breathing)
+        {
+            drowning = false;
+            GameObject.FindGameObjectWithTag("Drowning").GetComponent<AudioSource>().Stop();
+        }
     }
 
     private void Drowning()
@@ -58,8 +97,9 @@ public class OxygenManagement : MonoBehaviour
 
     private void UpdateDeathStatus()
     {
-        if (dead)
+        if (dead && !prevDead)
         {
+            GameObject.FindWithTag("DeathSound").GetComponent<AudioSource>().Play();
             GameObject diver = GameObject.FindGameObjectWithTag("Player");
             Animator animator = diver.GetComponent<Animator>();
             animator.SetTrigger("death");

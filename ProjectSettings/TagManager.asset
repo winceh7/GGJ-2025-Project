@@ -7,6 +7,21 @@ TagManager:
   - DiverLamp
   - DyingIndicator
   - PlayerHitbox
+  - EnterBubble
+  - ExitBubble
+  - BreathingSounds
+  - Drowning
+  - DeathSound
+  - Pedestals
+  - PickUpText
+  - Bubble
+  - Orb
+  - SmallBlue
+  - SmallRed
+  - SmallPurple
+  - SmallGreen
+  - PlaceText
+  - ProgressText
   layers:
   - Default
   - TransparentFX
